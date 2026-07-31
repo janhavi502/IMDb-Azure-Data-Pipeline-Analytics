@@ -1,0 +1,93 @@
+{
+	"name": "df_TitleCrew",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "snowflake_TitleCrewStg",
+						"type": "DatasetReference"
+					},
+					"name": "TitleCrewStg"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Flatten_TitleCrewStg",
+						"type": "DatasetReference"
+					},
+					"name": "FlattenTitleCrewStg"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumnDirectorsWriters"
+				},
+				{
+					"name": "flattenDirectors"
+				},
+				{
+					"name": "flattenWriters"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          TCONST as string,",
+				"          DIRECTORS as string,",
+				"          WRITERS as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> TitleCrewStg",
+				"TitleCrewStg derive(DIRECTORS = split(DIRECTORS,','),",
+				"          WRITERS = split(WRITERS,',')) ~> derivedColumnDirectorsWriters",
+				"derivedColumnDirectorsWriters foldDown(unroll(DIRECTORS),",
+				"     mapColumn(",
+				"          TCONST,",
+				"          DIRECTORS,",
+				"          WRITERS,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flattenDirectors",
+				"flattenDirectors foldDown(unroll(WRITERS),",
+				"     mapColumn(",
+				"          TCONST,",
+				"          DIRECTORS,",
+				"          WRITERS,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flattenWriters",
+				"flattenWriters sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TCONST as string,",
+				"          DIRECTORS as string,",
+				"          WRITERS as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          TCONST,",
+				"          DIRECTORS,",
+				"          WRITERS,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> FlattenTitleCrewStg"
+			]
+		}
+	}
+}

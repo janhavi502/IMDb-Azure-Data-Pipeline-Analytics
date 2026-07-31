@@ -1,0 +1,117 @@
+{
+	"name": "df_FlattenLanguageCodes",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sf_LanguageCodesStg",
+						"type": "DatasetReference"
+					},
+					"name": "dsLanguageCodes"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sf_FlattenedLangCodes",
+						"type": "DatasetReference"
+					},
+					"name": "sinkLangCodesFlattened"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "SKLANGCODE"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ISO_LANGUAGE_NAMES as string,",
+				"          LANGUAGE_CODE as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> dsLanguageCodes",
+				"dsLanguageCodes derive(LANGUAGE_CODE = split(LANGUAGE_CODE,','),",
+				"          ISO_LANGUAGE_NAMES = split(ISO_LANGUAGE_NAMES,',')) ~> derivedColumn1",
+				"derivedColumn1 foldDown(unroll(LANGUAGE_CODE),",
+				"     mapColumn(",
+				"          ISO_LANGUAGE_NAMES,",
+				"          LANGUAGE_CODE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"aggregate1 keyGenerate(output(Language_ID_SK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> SKLANGCODE",
+				"flatten1 foldDown(unroll(ISO_LANGUAGE_NAMES),",
+				"     mapColumn(",
+				"          ISO_LANGUAGE_NAMES,",
+				"          LANGUAGE_CODE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2 aggregate(groupBy(LANGUAGE_CODE,",
+				"          ISO_LANGUAGE_NAMES,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT),",
+				"     COUNT_ROW = count(LANGUAGE_CODE)) ~> aggregate1",
+				"SKLANGCODE select(mapColumn(",
+				"          LANGUAGE_CODE,",
+				"          ISO_LANGUAGE_NAMES,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT,",
+				"          Language_ID_SK",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          LANGUAGE_ID_SK as decimal(38,0),",
+				"          ISO_LANGUAGE_NAMES as string,",
+				"          LANGUAGE_CODE as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          LANGUAGE_ID_SK = Language_ID_SK,",
+				"          ISO_LANGUAGE_NAMES,",
+				"          LANGUAGE_CODE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sinkLangCodesFlattened"
+			]
+		}
+	}
+}

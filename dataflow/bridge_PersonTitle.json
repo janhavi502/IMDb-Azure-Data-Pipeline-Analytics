@@ -1,0 +1,150 @@
+{
+	"name": "bridge_PersonTitle",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sf_FlattenedNameBasics",
+						"type": "DatasetReference"
+					},
+					"name": "sourceFlattenedNameBasics"
+				},
+				{
+					"dataset": {
+						"referenceName": "sf_DimTitle",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDimTitle"
+				},
+				{
+					"dataset": {
+						"referenceName": "sf_DimPersonnel",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDimPersonnel"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Sf_BridgePersonTitle",
+						"type": "DatasetReference"
+					},
+					"name": "sinkBridgePersonTitle"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectColumns"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          NCONST as string,",
+				"          PRIMARYNAME as string,",
+				"          BIRTHYEAR as string,",
+				"          DEATHYEAR as string,",
+				"          PRIMARYPROFESSION as string,",
+				"          KNOWNFORTITLES as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceFlattenedNameBasics",
+				"source(output(",
+				"          TITLE_ID_SK as decimal(38,0),",
+				"          MOVIE_TITLE_NUMBER as string,",
+				"          PRIMARY_TITLE as string,",
+				"          ORIGINAL_TITLE as string,",
+				"          TITLE_TYPE as string,",
+				"          IS_ADULT as decimal(38,0),",
+				"          RELEASE_YEAR as string,",
+				"          END_YEAR as string,",
+				"          RUNTIME_MINUTES as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceDimTitle",
+				"source(output(",
+				"          PERSON_ID_SK as decimal(38,0),",
+				"          PERSON_NCONST as string,",
+				"          PERSON_NAME as string,",
+				"          BIRTH_YEAR as string,",
+				"          DEATH_YEAR as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceDimPersonnel",
+				"sourceFlattenedNameBasics select(mapColumn(",
+				"          NCONST,",
+				"          KNOWNFORTITLES",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectColumns",
+				"sourceDimTitle select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          MOVIE_TITLE_NUMBER",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"selectColumns, select1 join(KNOWNFORTITLES == MOVIE_TITLE_NUMBER,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, sourceDimPersonnel join(NCONST == PERSON_NCONST,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          PERSON_ID_SK,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TITLE_ID_SK as decimal(38,0),",
+				"          PERSON_ID_SK as decimal(38,0),",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as decimal(38,0)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          TITLE_ID_SK,",
+				"          PERSON_ID_SK,",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID",
+				"     )) ~> sinkBridgePersonTitle"
+			]
+		}
+	}
+}

@@ -1,0 +1,71 @@
+{
+	"name": "df_Load_DimDate",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sf_DateSTG",
+						"type": "DatasetReference"
+					},
+					"name": "sourceStgDate"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sf_DimDate",
+						"type": "DatasetReference"
+					},
+					"name": "sinkDimDate"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectDimDateColumns"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DATE_ID_SK as decimal(38,0),",
+				"          YEAR as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceStgDate",
+				"sourceStgDate select(mapColumn(",
+				"          DATE_ID_SK,",
+				"          YEAR,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectDimDateColumns",
+				"selectDimDateColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DATE_ID_SK as decimal(38,0),",
+				"          YEAR as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          DATE_ID_SK,",
+				"          YEAR,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sinkDimDate"
+			]
+		}
+	}
+}

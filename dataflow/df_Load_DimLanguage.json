@@ -1,0 +1,75 @@
+{
+	"name": "df_Load_DimLanguage",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sf_FlattenedLangCodes",
+						"type": "DatasetReference"
+					},
+					"name": "FlattenedLangCodes"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sf_DimLanguage",
+						"type": "DatasetReference"
+					},
+					"name": "sfDimLang"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectDimLanguageColumns"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          LANGUAGE_ID_SK as decimal(38,0),",
+				"          ISO_LANGUAGE_NAMES as string,",
+				"          LANGUAGE_CODE as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> FlattenedLangCodes",
+				"FlattenedLangCodes select(mapColumn(",
+				"          LANGUAGE_ID_SK,",
+				"          ISO_LANGUAGE_NAMES,",
+				"          LANGUAGE_CODE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectDimLanguageColumns",
+				"selectDimLanguageColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          LANGUAGE_ID_SK as decimal(38,0),",
+				"          LANGUAGE_CODE as string,",
+				"          LANGUAGE_NAME as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          LANGUAGE_ID_SK,",
+				"          LANGUAGE_CODE,",
+				"          LANGUAGE_NAME = ISO_LANGUAGE_NAMES,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sfDimLang"
+			]
+		}
+	}
+}

@@ -1,0 +1,251 @@
+{
+	"name": "Fact_Load",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable9",
+						"type": "DatasetReference"
+					},
+					"name": "DimTitleSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable_DIM_DATE",
+						"type": "DatasetReference"
+					},
+					"name": "DateDimSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable_Title_Rating",
+						"type": "DatasetReference"
+					},
+					"name": "TitleRating"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable_Title_Episode",
+						"type": "DatasetReference"
+					},
+					"name": "TitleEpisode"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sf_Fact",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectDimTitle"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select4"
+				},
+				{
+					"name": "select5"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "select6"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "surrogateKey1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     DI_JOB_ID as string (\"13\")",
+				"}",
+				"source(output(",
+				"          TITLE_ID_SK as decimal(38,0),",
+				"          MOVIE_TITLE_NUMBER as string,",
+				"          PRIMARY_TITLE as string,",
+				"          ORIGINAL_TITLE as string,",
+				"          TITLE_TYPE as string,",
+				"          IS_ADULT as decimal(38,0),",
+				"          RELEASE_YEAR as string,",
+				"          END_YEAR as string,",
+				"          RUNTIME_MINUTES as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> DimTitleSource",
+				"source(output(",
+				"          DATE_ID_SK as decimal(38,0),",
+				"          YEAR as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> DateDimSource",
+				"source(output(",
+				"          TCONST as string,",
+				"          AVERAGERATING as double,",
+				"          NUMVOTES as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> TitleRating",
+				"source(output(",
+				"          TCONST as string,",
+				"          PARENTTCONST as string,",
+				"          SEASONNUMBER as decimal(38,0),",
+				"          EPISDOENUMBER as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> TitleEpisode",
+				"DimTitleSource select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          MOVIE_TITLE_NUMBER,",
+				"          IS_ADULT,",
+				"          RELEASE_YEAR",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectDimTitle",
+				"DateDimSource select(mapColumn(",
+				"          DATE_ID_SK,",
+				"          YEAR",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"selectDimTitle, select1 join(RELEASE_YEAR == YEAR,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"TitleRating select(mapColumn(",
+				"          TCONST,",
+				"          AVERAGERATING,",
+				"          NUMVOTES",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"join1 select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          MOVIE_TITLE_NUMBER,",
+				"          IS_ADULT,",
+				"          RELEASE_YEAR,",
+				"          DATE_ID_SK",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"select3, select2 join(MOVIE_TITLE_NUMBER == TCONST,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"TitleEpisode select(mapColumn(",
+				"          TCONST,",
+				"          SEASONNUMBER,",
+				"          EPISDOENUMBER",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select4",
+				"join2 select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          MOVIE_TITLE_NUMBER,",
+				"          IS_ADULT,",
+				"          RELEASE_YEAR,",
+				"          DATE_ID_SK,",
+				"          AVERAGERATING,",
+				"          NUMVOTES",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select5",
+				"select5, select4 join(MOVIE_TITLE_NUMBER == TCONST,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3 select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          IS_ADULT,",
+				"          RELEASE_YEAR,",
+				"          DATE_ID_SK,",
+				"          AVERAGERATING,",
+				"          NUMVOTES,",
+				"          SEASONNUMBER,",
+				"          EPISDOENUMBER",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select6",
+				"select6 derive(DI_JOB_ID = $DI_JOB_ID,",
+				"          DI_LOAD_DT = currentDate()) ~> derivedColumn1",
+				"derivedColumn1 keyGenerate(output(Movie_ID_SK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          MOVIE_ID_SK as decimal(38,0),",
+				"          TITLE_ID_SK as decimal(38,0),",
+				"          DATE_ID_SK as decimal(38,0),",
+				"          RELEASE_YEAR as string,",
+				"          IS_ADULT as decimal(38,0),",
+				"          AVERAGE_RATING as double,",
+				"          NUM_VOTES as decimal(38,0),",
+				"          SEASON_NUMBER as decimal(38,0),",
+				"          EPISODE_NUMBER as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          MOVIE_ID_SK = Movie_ID_SK,",
+				"          TITLE_ID_SK,",
+				"          DATE_ID_SK,",
+				"          RELEASE_YEAR,",
+				"          IS_ADULT,",
+				"          AVERAGE_RATING = AVERAGERATING,",
+				"          NUM_VOTES = NUMVOTES,",
+				"          SEASON_NUMBER = SEASONNUMBER,",
+				"          EPISODE_NUMBER = EPISDOENUMBER,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,222 @@
+{
+	"name": "df_Bridge_RegionLangTitle",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sf_DimTitle",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDimTitle"
+				},
+				{
+					"dataset": {
+						"referenceName": "sf_DimLanguage",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDimLanguage"
+				},
+				{
+					"dataset": {
+						"referenceName": "sf_TitleAkasStg",
+						"type": "DatasetReference"
+					},
+					"name": "sfTitleAkas"
+				},
+				{
+					"dataset": {
+						"referenceName": "DimRegionSF",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDimRegion"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "BridgeTitleAkasSF",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "select4"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "selectBridgeTitleAkas"
+				},
+				{
+					"name": "select5"
+				},
+				{
+					"name": "select6"
+				},
+				{
+					"name": "select7"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          TITLE_ID_SK as decimal(38,0),",
+				"          MOVIE_TITLE_NUMBER as string,",
+				"          PRIMARY_TITLE as string,",
+				"          ORIGINAL_TITLE as string,",
+				"          TITLE_TYPE as string,",
+				"          IS_ADULT as decimal(38,0),",
+				"          RELEASE_YEAR as string,",
+				"          END_YEAR as string,",
+				"          RUNTIME_MINUTES as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceDimTitle",
+				"source(output(",
+				"          LANGUAGE_ID_SK as decimal(38,0),",
+				"          LANGUAGE_CODE as string,",
+				"          LANGUAGE_NAME as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceDimLanguage",
+				"source(output(",
+				"          TITLEID as string,",
+				"          ORDERING as decimal(38,0),",
+				"          TITLE as string,",
+				"          REGION as string,",
+				"          LANGUAGE as string,",
+				"          TYPES as string,",
+				"          ATTRIBUTES as string,",
+				"          ISORIGINALTITLE as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sfTitleAkas",
+				"source(output(",
+				"          REGION_ID_SK as decimal(38,0),",
+				"          REGION_CODE as string,",
+				"          REGION_NAME as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceDimRegion",
+				"select1, select2 join(TITLEID == MOVIE_TITLE_NUMBER,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, sourceDimRegion join(REGION == REGION_CODE,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"sfTitleAkas select(mapColumn(",
+				"          TITLEID,",
+				"          ORDERING,",
+				"          REGION,",
+				"          LANGUAGE,",
+				"          ISORIGINALTITLE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"sourceDimTitle select(mapColumn(",
+				"          TITLE_ID_SK,",
+				"          MOVIE_TITLE_NUMBER,",
+				"          ORIGINAL_TITLE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select2",
+				"sourceDimLanguage select(mapColumn(",
+				"          LANGUAGE_ID_SK,",
+				"          LANGUAGE_CODE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select4",
+				"join2, select4 join(LANGUAGE == LANGUAGE_CODE,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3 select(mapColumn(",
+				"          ORDERING,",
+				"          ISORIGINALTITLE,",
+				"          TITLE_ID_SK,",
+				"          ORIGINAL_TITLE,",
+				"          REGION_ID_SK,",
+				"          LANGUAGE_ID_SK,",
+				"          DI_JOB_ID = select4@DI_JOB_ID,",
+				"          DI_LOAD_DT = select4@DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> selectBridgeTitleAkas",
+				"select6 select(skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select5",
+				"select7 select(skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select6",
+				"sourceDimRegion select(skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select7",
+				"selectBridgeTitleAkas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TITLE_ID_SK as decimal(38,0),",
+				"          LANGUAGE_ID_SK as decimal(38,0),",
+				"          REGION_ID_SK as decimal(38,0),",
+				"          ORDERING as decimal(38,0),",
+				"          AKA_TITLE as string,",
+				"          IS_ORIGINALTITLE as decimal(38,0),",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          TITLE_ID_SK,",
+				"          LANGUAGE_ID_SK,",
+				"          REGION_ID_SK,",
+				"          ORDERING,",
+				"          AKA_TITLE = ORIGINAL_TITLE,",
+				"          IS_ORIGINALTITLE = ISORIGINALTITLE,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

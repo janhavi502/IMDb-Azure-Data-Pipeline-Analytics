@@ -1,0 +1,75 @@
+{
+	"name": "DF_Load_DimRegion",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SFRegionCodesStg",
+						"type": "DatasetReference"
+					},
+					"name": "RegionCodesStg"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SFREGIONDIM",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          COUNTRY_SK as decimal(38,0),",
+				"          COUNTRY_CODE as string,",
+				"          COUNTRY_NAME as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> RegionCodesStg",
+				"RegionCodesStg select(mapColumn(",
+				"          COUNTRY_SK,",
+				"          COUNTRY_CODE,",
+				"          COUNTRY_NAME,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          REGION_ID_SK as decimal(38,0),",
+				"          REGION_CODE as string,",
+				"          REGION_NAME as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          REGION_ID_SK = COUNTRY_SK,",
+				"          REGION_CODE = COUNTRY_CODE,",
+				"          REGION_NAME = COUNTRY_NAME,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

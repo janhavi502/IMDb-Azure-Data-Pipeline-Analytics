@@ -1,0 +1,144 @@
+{
+	"name": "DF_Bridge_Person_Profession",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable6",
+						"type": "DatasetReference"
+					},
+					"name": "Profession"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable7",
+						"type": "DatasetReference"
+					},
+					"name": "PersonSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable4",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable8",
+						"type": "DatasetReference"
+					},
+					"name": "ToTarget"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     job_ID as string (\"70\")",
+				"}",
+				"source(output(",
+				"          PROFESSION_ID_SK as decimal(38,0),",
+				"          PROFESSION_NCONST as string,",
+				"          PROFESSION_NAME as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> Profession",
+				"source(output(",
+				"          PERSON_ID_SK as decimal(38,0),",
+				"          PERSON_NCONST as string,",
+				"          PERSON_NAME as string,",
+				"          BIRTH_YEAR as string,",
+				"          DEATH_YEAR as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> PersonSource",
+				"source(output(",
+				"          NCONST as string,",
+				"          PRIMARYNAME as string,",
+				"          BIRTHYEAR as string,",
+				"          DEATHYEAR as string,",
+				"          PRIMARYPROFESSION as string,",
+				"          KNOWNFORTITLES as string,",
+				"          DI_JOB_ID as decimal(38,0),",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source1",
+				"PersonSource select(mapColumn(",
+				"          PERSON_ID_SK,",
+				"          PERSON_NCONST,",
+				"          PERSON_NAME",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"source1 select(mapColumn(",
+				"          NCONST,",
+				"          PRIMARYNAME,",
+				"          PRIMARYPROFESSION",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select1, select2 join(PERSON_NCONST == NCONST,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, Profession join(PRIMARYPROFESSION == PROFESSION_NAME,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 derive(DI_JOB_ID = $job_ID) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          PERSON_ID_SK as decimal(38,0),",
+				"          PROFESSION_ID_SK as decimal(38,0),",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as decimal(38,0)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          PERSON_ID_SK,",
+				"          PROFESSION_ID_SK,",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID",
+				"     )) ~> ToTarget"
+			]
+		}
+	}
+}
