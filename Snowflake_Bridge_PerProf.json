@@ -1,0 +1,41 @@
+{
+	"name": "Snowflake_Bridge_PerProf",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "db_ams_imdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "PROFESSION_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PROFESSION_NCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PROFESSION_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "DIM_PROFESSION"
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"name": "ds_TitleCrewStg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Title_Crew_Clean.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

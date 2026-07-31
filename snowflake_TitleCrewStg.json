@@ -1,0 +1,29 @@
+{
+	"name": "snowflake_TitleCrewStg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DIRECTORS",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "WRITERS",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "STG_TITLE_CREW"
+		}
+	}
+}

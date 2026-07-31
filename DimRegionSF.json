@@ -1,0 +1,16 @@
+{
+	"name": "DimRegionSF",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "DIM_REGION"
+		}
+	}
+}

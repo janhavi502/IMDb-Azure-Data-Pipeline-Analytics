@@ -1,0 +1,39 @@
+{
+	"name": "Sf_BridgePersonTitle",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TITLE_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PERSON_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "BRIDGE_PERSONTITLE"
+		}
+	}
+}

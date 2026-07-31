@@ -1,0 +1,32 @@
+{
+	"name": "ds_RegionCodesClean",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Region_Codes_Clean.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Country Code",
+				"type": "String"
+			},
+			{
+				"name": "Country Name",
+				"type": "String"
+			}
+		]
+	}
+}

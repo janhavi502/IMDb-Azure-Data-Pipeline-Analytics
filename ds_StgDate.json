@@ -1,0 +1,32 @@
+{
+	"name": "ds_StgDate",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Date_Clean.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Date_ID_SK",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			}
+		]
+	}
+}

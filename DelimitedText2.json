@@ -1,0 +1,52 @@
+{
+	"name": "DelimitedText2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsAMS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Principal_Clean.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "RecordID",
+				"type": "String"
+			},
+			{
+				"name": "tconst",
+				"type": "String"
+			},
+			{
+				"name": "ordering",
+				"type": "String"
+			},
+			{
+				"name": "nconst",
+				"type": "String"
+			},
+			{
+				"name": "category",
+				"type": "String"
+			},
+			{
+				"name": "job",
+				"type": "String"
+			},
+			{
+				"name": "characters",
+				"type": "String"
+			}
+		]
+	}
+}

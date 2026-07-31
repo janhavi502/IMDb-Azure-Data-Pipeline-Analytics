@@ -1,0 +1,28 @@
+{
+	"name": "snowflake_titleratings",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "db_ams_imdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "AVERAGERATING",
+				"type": "FLOAT"
+			},
+			{
+				"name": "NUMVOTES",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

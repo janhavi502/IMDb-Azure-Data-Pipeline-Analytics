@@ -1,0 +1,51 @@
+{
+	"name": "SnowflakeTable4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "db_ams_imdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "NCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PRIMARYNAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "BIRTHYEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DEATHYEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PRIMARYPROFESSION",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "KNOWNFORTITLES",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "FLATTEN_NAME_BASICS_STG"
+		}
+	}
+}

@@ -1,0 +1,36 @@
+{
+	"name": "DelimitedText4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsAMS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Title_Ratings_Clean.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "tconst",
+				"type": "String"
+			},
+			{
+				"name": "averageRating",
+				"type": "String"
+			},
+			{
+				"name": "numVotes",
+				"type": "String"
+			}
+		]
+	}
+}

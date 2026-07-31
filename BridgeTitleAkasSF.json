@@ -1,0 +1,61 @@
+{
+	"name": "BridgeTitleAkasSF",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TITLE_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "LANGUAGE_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "REGION_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ORDERING",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "AKA_TITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "IS_ORIGINALTITLE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "BRIDGE_TITLEAKAS"
+		}
+	}
+}

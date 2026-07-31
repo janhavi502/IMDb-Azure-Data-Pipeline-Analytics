@@ -1,0 +1,49 @@
+{
+	"name": "sf_DimPersonnel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "PERSON_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PERSON_NCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PERSON_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "BIRTH_YEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DEATH_YEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "DIM_PERSONNEL"
+		}
+	}
+}

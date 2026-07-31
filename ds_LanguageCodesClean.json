@@ -1,0 +1,40 @@
+{
+	"name": "ds_LanguageCodesClean",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Language_Codes_Clean.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ISO Language Names",
+				"type": "String"
+			},
+			{
+				"name": "Set 1",
+				"type": "String"
+			},
+			{
+				"name": "Set 2T",
+				"type": "String"
+			},
+			{
+				"name": "Set 2B",
+				"type": "String"
+			}
+		]
+	}
+}

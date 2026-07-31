@@ -1,0 +1,77 @@
+{
+	"name": "sf_Fact",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "db_ams_imdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "MOVIE_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "TITLE_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DATE_ID_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "RELEASE_YEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "IS_ADULT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "AVERAGE_RATING",
+				"type": "FLOAT"
+			},
+			{
+				"name": "NUM_VOTES",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "SEASON_NUMBER",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "EPISODE_NUMBER",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "FACT_MOVIE_DETAILS"
+		}
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"name": "sf_RegionCodesStg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "COUNTRY_CODE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "COUNTRY_NAME",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "STG_REGION_CODES"
+		}
+	}
+}

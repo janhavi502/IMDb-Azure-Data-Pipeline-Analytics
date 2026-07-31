@@ -1,0 +1,35 @@
+{
+	"name": "sf_DimRegion",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflakeams",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "REGION_ID_SK",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "REGION_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "DIM_REGION"
+		}
+	}
+}

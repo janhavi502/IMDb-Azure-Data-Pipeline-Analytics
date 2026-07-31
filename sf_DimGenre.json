@@ -1,0 +1,63 @@
+{
+	"name": "sf_DimGenre",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "db_ams_imdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TITLETYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PRIMARYTITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ORIGINALTITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ISADULT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STARTYEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ENDYEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RUNTIME_MINUTES",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "GENRES",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "FLATTEN_TITLE_BASICS_STG"
+		}
+	}
+}

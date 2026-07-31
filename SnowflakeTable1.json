@@ -1,0 +1,53 @@
+{
+	"name": "SnowflakeTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "db_ams_imdb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TITLEID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ORDERING",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "TITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "REGION",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LANGUAGE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TYPES",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ATTRIBUTES",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ISORIGINALTITLE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "MOVIE_SCHEMA",
+			"table": "STG_TITLE_AKAS"
+		}
+	}
+}
