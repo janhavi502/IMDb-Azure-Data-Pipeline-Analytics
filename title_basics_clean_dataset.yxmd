@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<AlteryxDocument yxmdVer="2024.2" RunE2="T">
+  <Nodes>
+    <Node ToolID="2">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="150" y="30" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <TempFile>C:\Users\minal\AppData\Local\Temp\Alteryx\Engine_7420_6615dbfec6b8425997c1b7f784b515b2_\Engine_7420_676cdb24c091425e9047753c87d45b9e~.yxdb</TempFile>
+          <TempFileDataProfiling />
+          <Layout>
+            <ViewMode>Single</ViewMode>
+            <ViewSize value="100" />
+            <View1>
+              <DefaultTab>Profile</DefaultTab>
+              <Hints>
+                <Table />
+              </Hints>
+            </View1>
+            <View2 />
+          </Layout>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+    <Node ToolID="4">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.AutoField.AutoField">
+        <Position x="150" y="114" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Fields>
+            <Field field="tconst" selected="True" />
+            <Field field="titleType" selected="True" />
+            <Field field="primaryTitle" selected="True" />
+            <Field field="originalTitle" selected="True" />
+            <Field field="isAdult" selected="True" />
+            <Field field="startYear" selected="True" />
+            <Field field="endYear" selected="True" />
+            <Field field="runtimeMinutes" selected="True" />
+            <Field field="genres" selected="True" />
+            <Field field="*Unknown" selected="True" />
+          </Fields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="tconst" size="10" source="File: C:\Users\minal\Desktop\title_basics.csv" type="String" />
+            <Field name="titleType" size="12" source="File: C:\Users\minal\Desktop\title_basics.csv" type="String" />
+            <Field name="primaryTitle" size="459" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="originalTitle" size="459" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="isAdult" size="4" source="File: C:\Users\minal\Desktop\title_basics.csv" type="String" />
+            <Field name="startYear" size="4" source="File: C:\Users\minal\Desktop\title_basics.csv" type="String" />
+            <Field name="endYear" size="4" source="File: C:\Users\minal\Desktop\title_basics.csv" type="String" />
+            <Field name="runtimeMinutes" size="23" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="genres" size="32" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxAutoField" />
+    </Node>
+    <Node ToolID="5">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="450" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <TempFile>C:\Users\minal\AppData\Local\Temp\Alteryx\Engine_7420_6615dbfec6b8425997c1b7f784b515b2_\Engine_7420_c449cae17ef24292b31c64a910410652~.yxdb</TempFile>
+          <TempFileDataProfiling />
+          <Layout>
+            <ViewMode>Single</ViewMode>
+            <ViewSize value="100" />
+            <View1>
+              <DefaultTab>Profile</DefaultTab>
+              <Hints>
+                <Table />
+              </Hints>
+            </View1>
+            <View2 />
+          </Layout>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+    <Node ToolID="6">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.AlteryxSelect.AlteryxSelect">
+        <Position x="246" y="114" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <OrderChanged value="False" />
+          <CommaDecimal value="False" />
+          <SelectFields>
+            <SelectField field="primaryTitle" selected="True" size="500" />
+            <SelectField field="originalTitle" selected="True" size="500" />
+            <SelectField field="isAdult" selected="True" type="V_String" size="2147483647" />
+            <SelectField field="*Unknown" selected="True" />
+          </SelectFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSelect" />
+    </Node>
+    <Node ToolID="7">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="342" y="114" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="IF ([startYear]) = &quot;\N&quot; THEN &quot;9999&quot;&#xA;ELSE [startYear]&#xA;ENDIF" field="startYear" size="4" type="String" enabled="true" />
+            <FormulaField expression="IF ([endYear]) = &quot;\N&quot; THEN &quot;9999&quot;&#xA;ELSE [endYear]&#xA;ENDIF" field="endYear" size="4" type="String" enabled="true" />
+            <FormulaField expression="ToNumber([startYear])" field="startYear" size="4" type="String" enabled="true" />
+            <FormulaField expression="ToNumber([endYear])" field="endYear" size="4" type="String" enabled="true" />
+            <FormulaField expression="IF ([genres]) = &quot;\N&quot; THEN &quot;Unknown&quot;&#xA;ELSE [genres]&#xA;ENDIF" field="genres" size="32" type="V_String" enabled="true" />
+            <FormulaField expression="IF ([runtimeMinutes]) = &quot;\N&quot; THEN &quot;-1&quot;&#xA;ELSE [runtimeMinutes]&#xA;ENDIF" field="runtimeMinutes" size="23" type="V_String" enabled="true" />
+            <FormulaField expression="ToNumber([isAdult])" field="isAdult" size="2147483647" type="V_String" enabled="true" />
+            <FormulaField expression="IF ToNumber([isAdult]) = 0 OR ToNumber([isAdult]) = 1 THEN ToNumber([isAdult])&#xA;ELSE 0&#xA;ENDIF" field="isAdult" size="2147483647" type="V_String" enabled="true" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText>startYear = IF ([startYear]) = "\N" THEN "9999"
+ELSE [startYear]
+ENDIF
+endYear =...</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+    <Node ToolID="9">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="42" y="102" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File RecordLimit="" SearchSubDirs="False" FileFormat="0" OutputFileName="">C:\Users\minal\Desktop\title_basics.csv</File>
+          <FormatSpecificOptions>
+            <HeaderRow>True</HeaderRow>
+            <IgnoreErrors>False</IgnoreErrors>
+            <AllowShareWrite>False</AllowShareWrite>
+            <ImportLine>1</ImportLine>
+            <FieldLen>500</FieldLen>
+            <SingleThreadRead>False</SingleThreadRead>
+            <IgnoreQuotes>DoubleQuotes</IgnoreQuotes>
+            <Delimeter>,</Delimeter>
+            <QuoteRecordBreak>False</QuoteRecordBreak>
+            <CodePage>28591</CodePage>
+          </FormatSpecificOptions>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText>title_basics.csv</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <Dependencies>
+          <Implicit />
+        </Dependencies>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="tconst" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="titleType" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="primaryTitle" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="originalTitle" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="isAdult" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="startYear" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="endYear" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="runtimeMinutes" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+            <Field name="genres" size="500" source="File: C:\Users\minal\Desktop\title_basics.csv" type="V_String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+    <Node ToolID="12">
+      <GuiSettings Plugin="AlteryxGuiToolkit.ToolContainer.ToolContainer">
+        <Position x="449" y="137" width="155" height="165" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Caption>Container 12</Caption>
+          <Style TextColor="#314c4a" FillColor="#ecf2f2" BorderColor="#314c4a" Transparency="25" Margin="25" />
+          <Disabled value="True" />
+          <Folded value="False" />
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name />
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <ChildNodes>
+        <Node ToolID="11">
+          <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+            <Position x="474" y="186" />
+          </GuiSettings>
+          <Properties>
+            <Configuration>
+              <File MaxRecords="" FileFormat="0">C:\Users\minal\Desktop\Title_Basics_Clean.csv</File>
+              <Passwords />
+              <Disable>False</Disable>
+              <FormatSpecificOptions>
+                <LineEndStyle>CRLF</LineEndStyle>
+                <Delimeter>,</Delimeter>
+                <ForceQuotes>False</ForceQuotes>
+                <HeaderRow>True</HeaderRow>
+                <CodePage>28591</CodePage>
+                <WriteBOM>True</WriteBOM>
+              </FormatSpecificOptions>
+              <MultiFile value="False" />
+            </Configuration>
+            <Annotation DisplayMode="0">
+              <Name />
+              <DefaultAnnotationText>Title_Basics_Clean.csv</DefaultAnnotationText>
+              <Left value="False" />
+            </Annotation>
+            <Dependencies>
+              <Implicit />
+            </Dependencies>
+          </Properties>
+          <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+        </Node>
+      </ChildNodes>
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection>
+      <Origin ToolID="4" Connection="Output" />
+      <Destination ToolID="6" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="6" Connection="Output" />
+      <Destination ToolID="7" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="7" Connection="Output" />
+      <Destination ToolID="5" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="7" Connection="Output" />
+      <Destination ToolID="11" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="9" Connection="Output" />
+      <Destination ToolID="4" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="9" Connection="Output" />
+      <Destination ToolID="2" Connection="Input" />
+    </Connection>
+  </Connections>
+  <Properties>
+    <Memory default="True" />
+    <GlobalRecordLimit value="0" />
+    <TempFiles default="True" />
+    <Annotation on="True" includeToolName="False" />
+    <ConvErrorLimit value="10" />
+    <ConvErrorLimit_Stop value="False" />
+    <CancelOnError value="False" />
+    <DisableBrowse value="False" />
+    <EnablePerformanceProfiling value="False" />
+    <RunWithE2 value="True" />
+    <PredictiveToolsCodePage value="1252" />
+    <DisableAllOutput value="False" />
+    <ShowAllMacroMessages value="False" />
+    <ShowConnectionStatusIsOn value="True" />
+    <ShowConnectionStatusOnlyWhenRunning value="True" />
+    <ZoomLevel value="0" />
+    <LayoutType>Horizontal</LayoutType>
+    <IsTemplate value="False" />
+    <MetaInfo>
+      <NameIsFileName value="True" />
+      <Name>title_basics_clean_dataset</Name>
+      <Description />
+      <RootToolName />
+      <ToolVersion />
+      <ToolInDb value="False" />
+      <CategoryName />
+      <SearchTags />
+      <Author />
+      <Company />
+      <Copyright />
+      <DescriptionLink actual="" displayed="" />
+      <Example>
+        <Description />
+        <File />
+      </Example>
+      <WorkflowId value="43a8e1b1-d2f3-4451-b648-7d5fa2d72f83" />
+      <Telemetry>
+        <PreviousWorkflowId value="89fb0f03-bd86-496c-aa13-e3ace46ad6fc" />
+        <OriginWorkflowId value="89fb0f03-bd86-496c-aa13-e3ace46ad6fc" />
+      </Telemetry>
+      <PlatformWorkflowId value="" />
+    </MetaInfo>
+    <Events>
+      <Enabled value="True" />
+    </Events>
+  </Properties>
+</AlteryxDocument>
